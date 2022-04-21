@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { Types } from '@tribeplatform/gql-client';
 import { logger } from '@/utils/logger';
 
-const DEFAULT_SETTINGS = {}
+const DEFAULT_SETTINGS = {};
 
 class WebhookController {
   public index = async (req: Request, res: Response, next: NextFunction) => {
@@ -80,6 +80,13 @@ class WebhookController {
    * TODO: Elaborate on this function
    */
   private async updateSettings(input) {
+    if (!input.data.settings?.orgId) {
+      return {
+        type: input.type,
+        status: 'FAILED',
+        errorMessage: `Missing required parameter orgId.`,
+      };
+    }
     return {
       type: input.type,
       status: 'SUCCEEDED',
