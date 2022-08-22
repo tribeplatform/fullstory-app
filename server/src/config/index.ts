@@ -1,6 +1,3 @@
-import { config } from 'dotenv';
-config({ path: `.env` });
-
 export const CREDENTIALS = process.env.CREDENTIALS === 'true';
 export const {
   NODE_ENV,
@@ -15,4 +12,5 @@ export const {
   LOG_FORMAT,
   LOG_DIR = '../logs',
   ORIGIN,
+  LOGGER_PRETTY_PRINT
 } = process.env;
