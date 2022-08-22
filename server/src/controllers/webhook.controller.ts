@@ -31,7 +31,7 @@ class WebhookController {
 
       this.logger.log(`Incoming webhook ${JSON.stringify(input)}`, {
         network: input?.networkId,
-        context: input?.context,
+        entity: input?.context,
         type: input?.type,
         actor: input?.actor?.id,
       })
