@@ -12,7 +12,7 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - run:
-          name: "Build and deploy application Docker image"
+          name: "Build and deploy docker image"
           command: |
             docker build --cache-from=app -t app .
             docker login --username $DOCKER_HUB_USERNAME --password $DOCKER_HUB_PASSWORD
@@ -24,6 +24,8 @@ jobs:
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_PASSWORD
+    environment:
+      DOCKER_REGISTERY: tribeplatform/hubspot
     steps:
       - checkout
       - run:
@@ -38,6 +40,8 @@ jobs:
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_PASSWORD
+    environment:
+      DOCKER_REGISTERY: tribeplatform/hubspot
     steps:
       - checkout
       - run:
