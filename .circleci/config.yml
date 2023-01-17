@@ -19,7 +19,7 @@ jobs:
       - setup_remote_docker:
           version: 19.03.13
       - run:
-          name: 'Build application Docker image'
+          name: "Build application Docker image"
           command: docker build --cache-from=app -t app .
       - deploy:
           name: Push application Docker image
@@ -29,49 +29,43 @@ jobs:
             docker push "${DOCKER_REGISTERY}:${CIRCLE_SHA1}"
   publish-dev:
     docker:
-      - image: tribeplatform/tribecd:0.1.15
+      - image: tribeplatform/cli:1.0.0
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_PASSWORD
-    environment:
-      DOCKER_REGISTERY: tribeplatform/fullstory
-      REVIEW_APP_NAME: fullstory
-      REVIEW_APP_ENV: development
-      REVIEW_APP_REGION: us-east-1
-      REVIEW_APP_IMAGE_URI: $DOCKER_REGISTERY:$CIRCLE_SHA1
     steps:
       - checkout
       - run:
-          name: 'Publish Image'
-          command: tcdi -cu
+          name: "Deploy app on DEV environment"
+          command: |
+            ops init -i -e ermia@bettermode.com -u $OPS_USERNAME -p $OPS_PASSWORD
+            ops app create -n fullstory -i $DOCKER_REGISTERY:$CIRCLE_SHA1
+            ops service deploy -s fullstory -i $DOCKER_REGISTERY:$CIRCLE_SHA1
   publish-prod:
     docker:
-      - image: tribeplatform/tribecd:0.1.15
+      - image: tribeplatform/cli:1.0.0
         auth:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_PASSWORD
-    environment:
-      DOCKER_REGISTERY: tribeplatform/fullstory
-      REVIEW_APP_NAME: fullstory
-      REVIEW_APP_ENV: production
-      REVIEW_APP_REGION: us-east-1
-      REVIEW_APP_IMAGE_URI: $DOCKER_REGISTERY:$CIRCLE_SHA1
     steps:
       - checkout
       - run:
-          name: 'Publish Image'
-          command: tcdi -cu
+          name: "Deploy app on PRD environment"
+          command: |
+            ops init -i -e ermia@bettermode.com -u $OPS_USERNAME -p $OPS_PASSWORD
+            ops app create -n fullstory -i $DOCKER_REGISTERY:$CIRCLE_SHA1 -e prd
+            ops service deploy -s fullstory -e prd -i $DOCKER_REGISTERY:$CIRCLE_SHA1
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
-  build_app:
+  app:
     jobs:
       - build:
           context: App
           filters:
             branches:
               only:
-                - master
+                - main
       - publish-dev:
           context: App
           requires:
@@ -79,7 +73,7 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
       - hold:
           type: approval
           requires:
@@ -91,4 +85,4 @@ workflows:
           filters:
             branches:
               only:
-                - master
+                - main
