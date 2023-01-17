@@ -25,7 +25,7 @@ jobs:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_PASSWORD
     environment:
-      DOCKER_REGISTERY: tribeplatform/hubspot
+      DOCKER_REGISTERY: tribeplatform/fullstory
     steps:
       - checkout
       - run:
@@ -41,7 +41,7 @@ jobs:
           username: $DOCKER_HUB_USERNAME
           password: $DOCKER_HUB_PASSWORD
     environment:
-      DOCKER_REGISTERY: tribeplatform/hubspot
+      DOCKER_REGISTERY: tribeplatform/fullstory
     steps:
       - checkout
       - run:
