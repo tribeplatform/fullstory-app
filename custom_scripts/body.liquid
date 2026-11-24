@@ -3,7 +3,7 @@
     (function(){
         var memberIdentity = {{ settings.memberIdentity }}
         if(memberIdentity.enabled){
-            var identifier = memberIdentity.identifier === 'externalId' ? '{{ member.externalId | default: member.id }}' : '{{ member.id }}';
+            var identifier = memberIdentity.identifier === 'externalId' ? ('{{ member.externalId }}' || '{{ member.id }}') : '{{ member.id }}';
             var prefix =  memberIdentity.prefix || 'Community'
             var options = {}
             options[prefix + ' ID'] = '{{ member.id }}'
